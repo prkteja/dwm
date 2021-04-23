@@ -257,7 +257,6 @@ static void updatetitle(Client *c);
 static void updatewindowtype(Client *c);
 static void updatewmhints(Client *c);
 static void view(const Arg *arg);
-static void shiftview(const Arg *arg);
 static Client *wintoclient(Window w);
 static Monitor *wintomon(Window w);
 static int xerror(Display *dpy, XErrorEvent *ee);
@@ -270,6 +269,10 @@ static int isdescprocess(pid_t p, pid_t c);
 static Client *swallowingclient(Window w);
 static Client *termforwin(const Client *c);
 static pid_t winpid(Window w);
+
+static void shiftview(const Arg *arg);
+static void shifttag(const Arg *arg);
+static void shifttagview(const Arg *arg);
 
 /* variables */
 static const char broken[] = "broken";
@@ -2585,6 +2588,33 @@ shiftview(const Arg *arg) {
 		   | selmon->tagset[selmon->seltags] << (LENGTH(tags) + arg->i);
 
 	view(&shifted);
+}
+
+void
+shifttag(const Arg *arg)
+{
+	Arg shifted;
+	if (!selmon->sel)
+		return;
+	unsigned int newtags = selmon->sel->tags;
+	if(arg->i > 0) {
+		newtags = newtags << 1;
+		if (!newtags)
+			newtags = 1;
+	}else {
+		newtags = newtags >> 1;
+		if (!newtags)
+			newtags = 1<<8;
+	}
+	shifted.ui = newtags;
+	tag(&shifted);
+}
+
+void 
+shifttagview(const Arg *arg)
+{
+	shifttag(arg);
+	shiftview(arg);
 }
 
 int
