@@ -2659,7 +2659,7 @@ shifttag(const Arg *arg)
 	unsigned int newtags = selmon->sel->tags;
 	if(arg->i > 0) {
 		newtags = newtags << 1;
-		if (!newtags)
+		if (!(newtags & ((1<<9)-1)))
 			newtags = 1;
 	}else {
 		newtags = newtags >> 1;
