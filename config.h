@@ -9,7 +9,7 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 
-static const char *fonts[]          = { "Google Sans:style=Medium:size=10", "Material Design Icons:size=10" };
+static const char *fonts[]          = { "Google Sans:style=Medium:size=11", "Material Design Icons:size=11" };
 static const char dmenufont[]       = "Google Sans:size=10";
 
 static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
@@ -44,6 +44,7 @@ static const Layout layouts[] = {
 	{ "[]=",      tile },    /* first entry is default */
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
+	{ NULL,       NULL },	 /* for cycle layouts */
 };
 
 /* key definitions */
@@ -123,11 +124,12 @@ static Key keys[] = {
 	{ MODKEY,                       XK_f,                     setlayout,      {.v = &layouts[1]} }, // float
 	{ MODKEY,                       XK_t,                     setlayout,      {.v = &layouts[0]} }, // tiling
 	{ MODKEY,                       XK_m,                     setlayout,      {.v = &layouts[2]} }, // monocle
+	{ MODKEY,						XK_backslash,			  cyclelayout,    {.i = +1 } },
 	{ MODKEY|ControlMask,           XK_f,                     setlayout,      {.v = &layouts[2]} }, // fullscreen
 	{ MODKEY|ControlMask,           XK_f,                     togglebar,      {0} }, // fullscreen
 
-	{ MODKEY,                       XK_h,                     setmfact,       {.f = -0.05} }, // decrease master size
-	{ MODKEY,                       XK_l,                     setmfact,       {.f = +0.05} }, // increase master size
+	{ MODKEY,						XK_h,                     setmfact,       {.f = -0.02} }, // decrease master size
+	{ MODKEY,						XK_l,                     setmfact,       {.f = +0.02} }, // increase master size
 
 	{ MODKEY,                       XK_j,                     focusstack,     {.i = +1 } }, // focus down
 	{ MODKEY,                       XK_k,                     focusstack,     {.i = -1 } }, // focus up
