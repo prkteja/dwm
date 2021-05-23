@@ -16,6 +16,7 @@ static const unsigned int gappih    = 10;       /* horiz inner gap between windo
 static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
 static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
 static const unsigned int gappov    = 10;       /* vert outer gap between windows and screen edge */
+static const unsigned int gappx		= gappih;   /* for deck patch */
 static const int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 
 /* tagging */
@@ -44,6 +45,7 @@ static const Layout layouts[] = {
 	{ "[]=",      tile },    /* first entry is default */
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
+	{ "[D]",      deck },
 	{ NULL,       NULL },	 /* for cycle layouts */
 };
 
@@ -124,6 +126,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_f,                     setlayout,      {.v = &layouts[1]} }, // float
 	{ MODKEY,                       XK_t,                     setlayout,      {.v = &layouts[0]} }, // tiling
 	{ MODKEY,                       XK_m,                     setlayout,      {.v = &layouts[2]} }, // monocle
+	{ MODKEY,                       XK_c,					  setlayout,      {.v = &layouts[3]} }, // deck
 	{ MODKEY,						XK_backslash,			  cyclelayout,    {.i = +1 } },
 	{ MODKEY|ControlMask,           XK_f,                     setlayout,      {.v = &layouts[2]} }, // fullscreen
 	{ MODKEY|ControlMask,           XK_f,                     togglebar,      {0} }, // fullscreen
@@ -150,12 +153,12 @@ static Key keys[] = {
 
 	{ MODKEY,                       XK_z,                     zoom,           {0} }, // zoom on selected window
 
-    { MODKEY,                       XK_Left,                  shiftview,         {.i = -1 } }, // switch to prev tag
-    { MODKEY,                       XK_Right,                 shiftview,         {.i = +1 } }, // switch to next tag
-	{ MODKEY|ShiftMask,             XK_Left,                  shifttag,          {.i = -1 } }, // shift win to prev tag
-    { MODKEY|ShiftMask,             XK_Right,                 shifttag,          {.i = +1 } }, // shift win to next tag
-    { MODKEY|ControlMask,           XK_Left,                  shifttagview,      {.i = -1 } }, // shift win and switch to prev tag
-    { MODKEY|ControlMask,           XK_Right,                 shifttagview,      {.i = +1 } }, // shift win and switch to next tag
+    { MODKEY,                       XK_Left,                  shiftview,      {.i = -1 } }, // switch to prev tag
+    { MODKEY,                       XK_Right,                 shiftview,      {.i = +1 } }, // switch to next tag
+	{ MODKEY|ShiftMask,             XK_Left,                  shifttag,       {.i = -1 } }, // shift win to prev tag
+    { MODKEY|ShiftMask,             XK_Right,                 shifttag,       {.i = +1 } }, // shift win to next tag
+    { MODKEY|ControlMask,           XK_Left,                  shifttagview,   {.i = -1 } }, // shift win and switch to prev tag
+    { MODKEY|ControlMask,           XK_Right,                 shifttagview,   {.i = +1 } }, // shift win and switch to next tag
     
 	{ MODKEY,                       XK_Tab,                   view,           {0} },         // view last tag
 	{ MODKEY,                       XK_0,                     view,           {.ui = ~0 } }, // view all tags
