@@ -29,6 +29,7 @@ static const Rule rules[] = {
 	 */
 	/* class     			instance     		title          tags mask   isfloating  	isterminal  noswallow  monitor */
 	{ "Alacritty",			NULL,       		NULL,          0,            0,        	1,          0,         	-1 },
+	{ "st-256color",		NULL,       		NULL,          0,            1,        	1,          0,         	-1 },
 	{ "TelegramDesktop", 	"telegram-desktop", "Media viewer",0,			 1, 		0, 		 	1, 			-1 }, // telegram media viewer
 	{ "firefox", 			"Toolkit",   		"Picture-in-Picture", 0,     1, 		0, 			0,			-1 },
 	{ "Pavucontrol", 		NULL,   			NULL, 		   0,    		 1, 		0, 			0,			-1 },
@@ -67,6 +68,7 @@ static const char *lock[]      = { "screenoff", NULL };
 static const char *powermenu[] = { "powermenu", NULL };
 static const char *winlist[]   = { "winlist", NULL };
 static const char *termcmd[]   = { "alacritty", NULL };
+static const char *termcmd2[]  = { "st", NULL };
 static const char *browser[]   = { "firefox-nightly", NULL };
 static const char *discord[]   = { "discord", NULL };
 static const char *pavu[]      = { "pavucontrol", NULL };
@@ -98,11 +100,10 @@ static Key keys[] = {
 	{ MODKEY,                       XK_space,                 spawn,          {.v = dmenucmd } },
 	{ Mod1Mask,                     XK_space,                 spawn,          {.v = winlist } },
 	{ MODKEY,                       XK_Return,                spawn,          {.v = termcmd } },
+	{ MODKEY|ShiftMask,             XK_Return,                spawn,          {.v = termcmd2 } },
 	{ MODKEY,                       XK_e,                     spawn,          {.v = files } },
 	{ MODKEY,                       XK_w,                     spawn,          {.v = browser } },
-// 	{ MODKEY|ControlMask,           XK_d,                     spawn,          {.v = discord } },
 	{ MODKEY|ControlMask,           XK_p,                     spawn,          {.v = pavu } },
-// 	{ MODKEY|ControlMask,           XK_s,                     spawn,          {.v = spotify } },
 	{ MODKEY,                       XK_Print,                 spawn,          {.v = flameshot } },
 
 	// laptop audio control
@@ -179,16 +180,17 @@ static Key keys[] = {
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
-	/* click                event mask      button          function        argument */
-	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
-	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
-	{ ClkWinTitle,          0,              Button1,        spawn,          {.v = winlist } },
-	{ ClkWinTitle,          0,              Button3,        zoom,           {0} },
-	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} }, // move window
-	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} }, // float window
-	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} }, // resize window
-	{ ClkTagBar,            0,              Button1,        view,           {0} }, // view tag
-	{ ClkTagBar,            0,              Button3,        toggleview,     {0} }, // toggle multiple tags
-	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} }, // dont know what it does
-	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} }, // ||
+	/* click                event mask			 button          function        argument */
+	{ ClkLtSymbol,          0,					 Button1,        setlayout,      {0} },
+	{ ClkLtSymbol,          0,             		 Button3,        setlayout,      {.v = &layouts[2]} },
+	{ ClkWinTitle,          0,             		 Button1,        spawn,          {.v = winlist } },
+	{ ClkWinTitle,          0,             		 Button3,        zoom,           {0} },
+	{ ClkClientWin,         MODKEY,        		 Button1,        movemouse,      {0} }, // move window
+	{ ClkClientWin,         MODKEY,        		 Button2,        togglefloating, {0} }, // float window
+	{ ClkClientWin,         MODKEY,        		 Button3,        resizemouse,    {0} }, // resize window
+	{ ClkClientWin,         MODKEY|ShiftMask,    Button1,        resizemouse,    {0} }, // resize window
+	{ ClkTagBar,            0,					 Button1,        view,           {0} }, // view tag
+	{ ClkTagBar,            0,             		 Button3,        toggleview,     {0} }, // toggle multiple tags
+	{ ClkTagBar,            MODKEY,        		 Button1,        tag,            {0} }, // dont know what it does
+	{ ClkTagBar,            MODKEY,        		 Button3,        toggletag,      {0} }, // ||
 };
