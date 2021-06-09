@@ -40,6 +40,7 @@ static const char pn_bg3[]      	= "#444267";
 static const char pn_blue[]     	= "#82aaff";
 static const char pn_purple[]   	= "#c792ea";
 static const char pn_green[]		= "#c3e88d";
+static const char pn_cyan[]			= "#89ddff";
 static const char pn_green2[]   	= "#80cbc4";
 static const char pn_fg[]       	= "#eeffff";
 
@@ -71,24 +72,22 @@ static const char *colors[][3]      = {
 	// [SchemeSel]  = { nord_bg,	nord_blue, nord_blue  },
 
 	/* Dracula */
-	// [SchemeNorm] = { drac_fg,   drac_bg3,	drac_sel  },
-	// [SchemeSel]  = { drac_fg,   drac_grey,	drac_sel2  },
-	// [SchemeSel]  = { drac_bg3,  drac_sel2,	drac_sel2  },
-	// [SchemeSel]  = { drac_sel2, drac_bg,	drac_sel2  },
+	[SchemeNorm] = { drac_fg,   drac_bg3,	drac_sel  },
+	[SchemeSel]  = { drac_sel2, drac_bg,	drac_sel2  },
 	
 	/* Arc Dark */
-	// [SchemeNorm] = { arc_fg,   arc_bg,    arc_bg2  },
+	// [SchemeNorm] = { arc_fg,   arc_bg2,    arc_bg3 },
 	// [SchemeSel]  = { arc_fg,   arc_blue,  arc_blue },
 	
 	/* Material Palenight */
-	// [SchemeNorm] = { pn_fg,  pn_bg,	  pn_bg },
-	// [SchemeSel]  = { pn_bg4,	pn_blue,  pn_blue },
+	// [SchemeNorm] = { pn_fg,		pn_bg,	pn_bg2 },
+	// [SchemeSel]  = { pn_blue,	pn_bg,  pn_blue },
 	
 	/* Gruvbox dark */
-	[SchemeNorm] = { gb_fg,   	gb_bg2,   	gb_bg3   },
-	[SchemeSel]  = { gb_bg,   	gb_fg2, 	gb_fg2   },
+	// [SchemeNorm] = { gb_fg,   	gb_bg2,   	gb_bg3   },
+	// [SchemeSel]  = { gb_bg,   	gb_fg2, 	gb_fg2   },
 	
 	/* One dark */
 	// [SchemeNorm]	= { one_fg,	  one_bg,	one_bg2 },
-	// [SchemeSel]		= {one_bg,	  one_blue,	one_blue },
+	// [SchemeSel]		= {one_blue,   one_bg,	one_blue },
 };

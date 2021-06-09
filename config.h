@@ -63,7 +63,8 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[]  = { "dmenu_run", "-i", NULL };
+static const char *dmenucmd[]  = { "dmenu_run_h", "-i", NULL };
+static const char *dmenuhcmd[] = { "dmenu_hist", "-i", NULL };
 static const char *lock[]      = { "screenoff", NULL };
 static const char *powermenu[] = { "powermenu", NULL };
 static const char *winlist[]   = { "winlist", NULL };
@@ -88,6 +89,7 @@ static const char *db_br_update[] = { "pkill", "-RTMIN+2", "dwmblocks", NULL };
 static const char *play_tggl[] = { "python3", "/home/rohit/.config/scripts/media.py", NULL };
 static const char *play_next[] = { "playerctl", "next", NULL };
 static const char *play_prev[] = { "playerctl", "previous", NULL };
+static const char *skippy_xd[] = { "skippy-xd", NULL };
 
 static Key keys[] = {
 	/* modifier                     key                       function        argument */
@@ -97,7 +99,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Delete,	              spawn,          {.v = powermenu} }, // powermenu
 
 	// open programs
-	{ MODKEY,                       XK_space,                 spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_space,                 spawn,          {.v = dmenuhcmd } },
+	{ MODKEY|ControlMask,           XK_space,                 spawn,          {.v = dmenucmd } },
 	{ Mod1Mask,                     XK_space,                 spawn,          {.v = winlist } },
 	{ MODKEY,                       XK_Return,                spawn,          {.v = termcmd } },
 	{ MODKEY|ShiftMask,             XK_Return,                spawn,          {.v = termcmd2 } },
@@ -105,6 +108,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_w,                     spawn,          {.v = browser } },
 	{ MODKEY|ControlMask,           XK_p,                     spawn,          {.v = pavu } },
 	{ MODKEY,                       XK_Print,                 spawn,          {.v = flameshot } },
+	{ MODKEY,                       XK_x,                     spawn,          {.v = skippy_xd } },
 
 	// laptop audio control
 	{ 0,                            XF86XK_AudioRaiseVolume,  spawn,          {.v = vol_up } },
@@ -184,6 +188,7 @@ static Button buttons[] = {
 	{ ClkLtSymbol,          0,					 Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,             		 Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkWinTitle,          0,             		 Button1,        spawn,          {.v = winlist } },
+	{ ClkWinTitle,          0,             		 Button2,        killclient,     {0} },
 	{ ClkWinTitle,          0,             		 Button3,        zoom,           {0} },
 	{ ClkClientWin,         MODKEY,        		 Button1,        movemouse,      {0} }, // move window
 	{ ClkClientWin,         MODKEY,        		 Button2,        togglefloating, {0} }, // float window
