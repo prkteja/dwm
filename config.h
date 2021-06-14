@@ -47,6 +47,7 @@ static const Layout layouts[] = {
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
 	{ "[D]",      deck },
+	{ "TT" ,	  bstack },
 	{ NULL,       NULL },	 /* for cycle layouts */
 };
 
@@ -132,6 +133,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_t,                     setlayout,      {.v = &layouts[0]} }, // tiling
 	{ MODKEY,                       XK_m,                     setlayout,      {.v = &layouts[2]} }, // monocle
 	{ MODKEY,                       XK_c,					  setlayout,      {.v = &layouts[3]} }, // deck
+	{ MODKEY|ShiftMask,             XK_t,                     setlayout,      {.v = &layouts[4]} }, // bstack
 	{ MODKEY,						XK_backslash,			  cyclelayout,    {.i = +1 } },
 	{ MODKEY|ControlMask,           XK_f,                     setlayout,      {.v = &layouts[2]} }, // fullscreen
 	{ MODKEY|ControlMask,           XK_f,                     togglebar,      {0} }, // fullscreen
