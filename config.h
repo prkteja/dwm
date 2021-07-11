@@ -9,18 +9,18 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 
-static const char *fonts[]          = { "Google Sans:style=Medium:size=11", "Material Design Icons:size=11" };
+static const char *fonts[]          = { "Google Sans:style=Medium:size=11", "Material Design Icons:size=11", "Noto Sans Telugu UI:style=Bold:size=11" };
 static const char dmenufont[]       = "Google Sans:size=10";
 
 static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
 static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
 static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
 static const unsigned int gappov    = 10;       /* vert outer gap between windows and screen edge */
-static const unsigned int gappx		= gappih;   /* for deck patch */
 static const int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+// static const char *tags[] = { "౧", "౨", "౩", "౪", "౫", "౬", "౭", "౮", "౯" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -33,6 +33,7 @@ static const Rule rules[] = {
 	{ "TelegramDesktop", 	"telegram-desktop", "Media viewer",0,			 1, 		0, 		 	1, 			-1 }, // telegram media viewer
 	{ "firefox", 			"Toolkit",   		"Picture-in-Picture", 0,     1, 		0, 			0,			-1 },
 	{ "Pavucontrol", 		NULL,   			NULL, 		   0,    		 1, 		0, 			0,			-1 },
+	{ "Nm-connection-editor", 		NULL,		NULL, 		   0,    		 1, 		0, 			0,			-1 },
 	{ NULL,       			NULL,       		"Event Tester",0,            0,        	0,          1,         	-1 }, // xev
 };
 
@@ -77,6 +78,7 @@ static const char *pavu[]      = { "pavucontrol", NULL };
 static const char *flameshot[] = { "flameshot", "gui", NULL };
 static const char *spotify[]   = { "spotify", NULL };
 static const char *files[]     = { "thunar", NULL };
+static const char *network[]   = { "nm-connection-editor", NULL };
 
 static const char *bright_down[]   = {"brightnessctl", "set", "5%-", NULL};
 static const char *bright_up[] = {"brightnessctl", "set", "5%+", NULL};
@@ -91,6 +93,7 @@ static const char *play_tggl[] = { "python3", "/home/rohit/.config/scripts/media
 static const char *play_next[] = { "playerctl", "next", NULL };
 static const char *play_prev[] = { "playerctl", "previous", NULL };
 static const char *skippy_xd[] = { "skippy-xd", NULL };
+static const char *clipmenu[]  = { "clipmenu", NULL };
 
 static Key keys[] = {
 	/* modifier                     key                       function        argument */
@@ -110,6 +113,8 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,           XK_p,                     spawn,          {.v = pavu } },
 	{ MODKEY,                       XK_Print,                 spawn,          {.v = flameshot } },
 	{ MODKEY,                       XK_x,                     spawn,          {.v = skippy_xd } },
+	{ MODKEY,                       XK_v,                     spawn,          {.v = clipmenu } },
+	{ MODKEY,                       XK_n,                     spawn,          {.v = network } },
 
 	// laptop audio control
 	{ 0,                            XF86XK_AudioRaiseVolume,  spawn,          {.v = vol_up } },
@@ -133,13 +138,13 @@ static Key keys[] = {
 	{ MODKEY,                       XK_t,                     setlayout,      {.v = &layouts[0]} }, // tiling
 	{ MODKEY,                       XK_m,                     setlayout,      {.v = &layouts[2]} }, // monocle
 	{ MODKEY,                       XK_c,					  setlayout,      {.v = &layouts[3]} }, // deck
-	{ MODKEY|ShiftMask,             XK_t,                     setlayout,      {.v = &layouts[4]} }, // bstack
+	{ MODKEY,				        XK_o,                     setlayout,      {.v = &layouts[4]} }, // bstack
 	{ MODKEY,						XK_backslash,			  cyclelayout,    {.i = +1 } },
 	{ MODKEY|ControlMask,           XK_f,                     setlayout,      {.v = &layouts[2]} }, // fullscreen
 	{ MODKEY|ControlMask,           XK_f,                     togglebar,      {0} }, // fullscreen
 
-	{ MODKEY,						XK_h,                     setmfact,       {.f = -0.02} }, // decrease master size
-	{ MODKEY,						XK_l,                     setmfact,       {.f = +0.02} }, // increase master size
+	{ MODKEY|ShiftMask,				XK_h,                     setmfact,       {.f = -0.04} }, // decrease master size
+	{ MODKEY|ShiftMask,				XK_l,                     setmfact,       {.f = +0.04} }, // increase master size
 
 	{ MODKEY,                       XK_j,                     focusstack,     {.i = +1 } }, // focus down
 	{ MODKEY,                       XK_k,                     focusstack,     {.i = -1 } }, // focus up
@@ -160,6 +165,8 @@ static Key keys[] = {
 
 	{ MODKEY,                       XK_z,                     zoom,           {0} }, // zoom on selected window
 
+    { MODKEY,                       XK_h,		              shiftview,      {.i = -1 } }, // switch to prev tag
+    { MODKEY,                       XK_l,					  shiftview,      {.i = +1 } }, // switch to next tag
     { MODKEY,                       XK_Left,                  shiftview,      {.i = -1 } }, // switch to prev tag
     { MODKEY,                       XK_Right,                 shiftview,      {.i = +1 } }, // switch to next tag
 	{ MODKEY|ShiftMask,             XK_Left,                  shifttag,       {.i = -1 } }, // shift win to prev tag
@@ -187,8 +194,8 @@ static Key keys[] = {
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
 	/* click                event mask			 button          function        argument */
-	{ ClkLtSymbol,          0,					 Button1,        setlayout,      {0} },
-	{ ClkLtSymbol,          0,             		 Button3,        setlayout,      {.v = &layouts[2]} },
+	{ ClkLtSymbol,          0,					 Button1,        cyclelayout,    {.i = +1 } },
+	{ ClkLtSymbol,          0,             		 Button3,        setlayout,      {0} },
 	{ ClkWinTitle,          0,             		 Button1,        spawn,          {.v = winlist } },
 	{ ClkWinTitle,          0,             		 Button2,        killclient,     {0} },
 	{ ClkWinTitle,          0,             		 Button3,        zoom,           {0} },
