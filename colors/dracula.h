@@ -17,7 +17,6 @@ static const char *colors[][3]      = {
 	/*               fg				bg         border   */
 	[SchemeNorm]	= { drac_fg,		drac_bg3,	drac_sel  },
 	[SchemeSel]		= { drac_bg3,		drac_sel2,	drac_sel2 },
-	[SchemeOpen]	= { drac_fg,		drac_bg3,	drac_sel  },
 	[SchemeSymbol]	= { drac_fg,		drac_bg2,	drac_sel  },
 	[SchemeTitle]	= { drac_sel2,		drac_bg,	drac_sel  },
 	[SchemeCol1]	= { drac_green,		drac_bg3,	drac_sel  },

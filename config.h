@@ -8,6 +8,7 @@ static const unsigned int snap      = 8;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
+static const int hidevacanttags		= 0;		/* Hide vacant tags and remove rectangle indicators */
 
 static const char *fonts[]          = { "Google Sans:style=Medium:size=11", "Material Design Icons:size=11", "Noto Sans Telugu UI:style=Bold:size=11" };
 static const char dmenufont[]       = "Google Sans:size=10";
