@@ -97,6 +97,9 @@ static const char *play_prev[] = { "playerctl", "previous", NULL };
 static const char *skippy_xd[] = { "skippy-xd", NULL };
 static const char *clipmenu[]  = { "clipmenu", NULL };
 
+static const char scratchpadname[] = "scratchpad";
+static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
+
 static Key keys[] = {
 	/* modifier                     key                       function        argument */
 	{ MODKEY,                       XK_Escape,                killclient,     {0} },         // kill window
@@ -180,6 +183,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_0,                     view,           {.ui = ~0 } }, // view all tags
 	{ MODKEY|ShiftMask,             XK_0,                     tag,            {.ui = ~0 } }, // tag applications
 	{ MODKEY|ShiftMask,             XK_f,					  togglefloating, {0} }, //float window
+	{ MODKEY,                       XK_grave,				  togglescratch,  {.v = scratchpadcmd } },
 
 	TAGKEYS(                        XK_1,                                     0)
 	TAGKEYS(                        XK_2,                                     1)
