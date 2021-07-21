@@ -149,8 +149,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_c,					  setlayout,      {.v = &layouts[3]} }, // deck
 	{ MODKEY,				        XK_o,                     setlayout,      {.v = &layouts[4]} }, // bstack
 	{ MODKEY,						XK_backslash,			  cyclelayout,    {.i = +1 } },
-	{ MODKEY|ControlMask,           XK_f,                     setlayout,      {.v = &layouts[2]} }, // fullscreen
-	{ MODKEY|ControlMask,           XK_f,                     togglebar,      {0} }, // fullscreen
+	{ MODKEY,						XK_p,					  togglefullscreen,    {0} },
 
 	{ MODKEY|ShiftMask,				XK_h,                     setmfact,       {.f = -0.04} }, // decrease master size
 	{ MODKEY|ShiftMask,				XK_l,                     setmfact,       {.f = +0.04} }, // increase master size
