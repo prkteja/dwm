@@ -10,7 +10,7 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 static const int hidevacanttags		= 0;		/* Hide vacant tags and remove rectangle indicators */
 
-static const char *fonts[]          = { "Google Sans:style=Medium:size=11", "Material Design Icons:size=11", "Noto Sans Telugu UI:style=Bold:size=11" };
+static const char *fonts[]          = { "Google Sans:style=Medium:size=11", "Material Design Icons:size=11" };
 static const char dmenufont[]       = "Google Sans:size=10";
 
 static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
@@ -21,8 +21,7 @@ static const int smartgaps          = 0;        /* 1 means no outer gap when the
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-// static const char *tags[] = { "౧", "౨", "౩", "౪", "౫", "౬", "౭", "౮", "౯" };
-// static const char *tags[] = { "", "󰈹", "󰗹", "󰘦", "󰚺", "󰚺", "󰉋", "󰔁", "󰓇" };
+// static const char *tags[] = { "1 : 󰚺", "2 : 󰈹", "3 : 󰨞", "4", "5", "6", "7", "8 : 󰔁", "9 : 󰓇" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -170,8 +169,8 @@ static Key keys[] = {
 
 	{ MODKEY,                       XK_z,                     zoom,           {0} }, // zoom on selected window
 
-    { MODKEY,                       XK_h,		              shiftview,      {.i = -1 } }, // switch to prev tag
-    { MODKEY,                       XK_l,					  shiftview,      {.i = +1 } }, // switch to next tag
+    { MODKEY,                       XK_h,		              shiftviewactive,      {.i = -1 } }, // switch to prev active tag
+    { MODKEY,                       XK_l,					  shiftviewactive,      {.i = +1 } }, // switch to next active tag
     { MODKEY,                       XK_Left,                  shiftview,      {.i = -1 } }, // switch to prev tag
     { MODKEY,                       XK_Right,                 shiftview,      {.i = +1 } }, // switch to next tag
 	{ MODKEY|ShiftMask,             XK_Left,                  shifttag,       {.i = -1 } }, // shift win to prev tag

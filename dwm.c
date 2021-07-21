@@ -284,6 +284,7 @@ static Client *termforwin(const Client *c);
 static pid_t winpid(Window w);
 
 static void shiftview(const Arg *arg);
+static void shiftviewactive(const Arg *arg);
 static void shifttag(const Arg *arg);
 static void shifttagview(const Arg *arg);
 
@@ -919,7 +920,7 @@ deck(Monitor *m)
 	getfacts(m, mh, sh, &mfacts, &sfacts, &mrest, &srest);
 
 	if (n - m->nmaster > 0) /* override layout symbol */
-		snprintf(m->ltsymbol, sizeof m->ltsymbol, "Deck %d", n - m->nmaster);
+		snprintf(m->ltsymbol, sizeof m->ltsymbol, "Deck : %d", n - m->nmaster);
 
 	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
 		if (i < m->nmaster) {
@@ -1432,7 +1433,7 @@ monocle(Monitor *m)
 		if (ISVISIBLE(c))
 			n++;
 	if (n > 0) /* override layout symbol */
-		snprintf(m->ltsymbol, sizeof m->ltsymbol, "Max %d", n);
+		snprintf(m->ltsymbol, sizeof m->ltsymbol, "Max : %d", n);
 	for (c = nexttiled(m->clients); c; c = nexttiled(c->next))
 		resize(c, m->wx, m->wy, m->ww - 2 * c->bw, m->wh - 2 * c->bw, 0);
 }
@@ -2874,6 +2875,27 @@ shiftview(const Arg *arg) {
 		shifted.ui = selmon->tagset[selmon->seltags] >> (- arg->i)
 		   | selmon->tagset[selmon->seltags] << (LENGTH(tags) + arg->i);
 
+	view(&shifted);
+}
+
+void
+shiftviewactive(const Arg *arg) {
+	Arg shifted;
+	Client* c;
+	int occ = 0;
+	for (c = selmon->clients; c; c = c->next) {
+		occ |= (c->tags == 255 && hidevacanttags) ? 0 : c->tags;
+	}
+	shifted.ui = selmon->tagset[selmon->seltags];
+	do {
+		if(arg->i > 0) // left circular shift
+			shifted.ui = (shifted.ui << arg->i)
+			   | (shifted.ui >> (LENGTH(tags) - arg->i));
+
+		else // right circular shift
+			shifted.ui = shifted.ui >> (- arg->i)
+			   | shifted.ui << (LENGTH(tags) + arg->i);
+	} while (!(shifted.ui & occ)); 
 	view(&shifted);
 }
 
