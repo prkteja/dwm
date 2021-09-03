@@ -7,6 +7,7 @@ static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 8;		/* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
+static const int user_bh            = 0;       /* 0 means that dwm will calculate bar height */
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 static const int hidevacanttags		= 1;		/* Hide vacant tags and remove rectangle indicators */
 
@@ -35,7 +36,7 @@ static const Rule rules[] = {
 	 */
 	/* class     			instance     		title          tags mask   isfloating  	isterminal  noswallow  monitor */
 	{ "Alacritty",			NULL,       		NULL,          0,            0,        	1,          0,         	-1 },
-	{ "st-256color",		NULL,       		NULL,          0,            1,        	1,          0,         	-1 },
+	{ "st-256color",		NULL,       		NULL,          0,            0,        	1,          0,         	-1 },
 	{ "TelegramDesktop", 	"telegram-desktop", "Media viewer",0,			 1, 		0, 		 	1, 			-1 }, // telegram media viewer
 	{ "firefox", 			"Toolkit",   		"Picture-in-Picture", 0,     1, 		0, 			0,			-1 },
 	{ "Pavucontrol", 		NULL,   			NULL, 		   0,    		 1, 		0, 			0,			-1 },
@@ -102,7 +103,7 @@ static const char *skippy_xd[] = { "skippy-xd", NULL };
 static const char *clipmenu[]  = { "clipmenu", NULL };
 
 static const char scratchpadname[] = "scratchpad";
-static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
+static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x30", NULL };
 
 static Key keys[] = {
 	/* modifier                     key                       function        argument */
