@@ -94,7 +94,8 @@ static const char *vol_up[]    = { "pactl", "set-sink-volume", "@DEFAULT_SINK@",
 static const char *vol_down[]  = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-2%", NULL };
 static const char *vol_mute[]  = { "pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle", NULL };
 static const char *db_vol_update[] = { "pkill", "-RTMIN+1", "dwmblocks", NULL };
-static const char *db_br_update[] = { "pkill", "-RTMIN+2", "dwmblocks", NULL };
+static const char *db_br_update[]  = { "pkill", "-RTMIN+2", "dwmblocks", NULL };
+static const char *xob_br_update[] = { "/home/rohit/.config/xob/scripts/brightness.sh", NULL };
 
 static const char *play_tggl[] = { "python3", "/home/rohit/.config/scripts/media.py", NULL };
 static const char *play_next[] = { "playerctl", "next", NULL };

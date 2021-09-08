@@ -1,9 +1,9 @@
 static const char drac_bg[] 		= "#282a36";
 static const char drac_bg2[]		= "#383a59";
 static const char drac_bg3[] 		= "#1e1f29";
-static const char drac_sel[] 		= "#6272a4";
+static const char drac_sel[] 		= "#5f6a8e";
 static const char drac_sel2[]		= "#bd93f9";
-static const char drac_sel3[]		= "#6e5991";
+static const char drac_sel3[]		= "#664c90";
 static const char drac_fg[] 		= "#f8f8f2";
 static const char drac_fg2[] 		= "#9da0c6";
 static const char drac_green[]		= "#50fa7b";
@@ -13,6 +13,7 @@ static const char drac_orange[]		= "#ffb86c";
 static const char drac_red[]		= "#ff5555";
 static const char drac_pink[]		= "#ff79c6";
 static const char drac_grey[]		= "#44475a";
+static const char drac_grey2[]		= "#343746";
 
 static const char *colors[][3]      = {
 	/*               fg				bg         border   */
