@@ -11,6 +11,7 @@ static const char buttonbar[]       = "󰣇";
 static const int user_bh            = 0;       /* 0 means that dwm will calculate bar height */
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 static const int hidevacanttags		= 1;		/* Hide vacant tags and remove rectangle indicators */
+static const int floathighlight		= 1;		/* Use different border color for floating window */
 
 static const char *fonts[]          = { "Google Sans:style=Medium:size=11", "Material Design Icons:size=11" };
 static const char dmenufont[]       = "Google Sans:size=10";
