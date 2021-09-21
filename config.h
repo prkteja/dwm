@@ -3,12 +3,12 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 2;        /* border pixel of windows */
+static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 8;		/* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char buttonbar[]       = "󰣇";
-static const int user_bh            = 0;       /* 0 means that dwm will calculate bar height */
+static const char buttonbar[]       = ""; //󰣇   /* Empty string means no button */
+static const int user_bh            = 0;        /* 0 means that dwm will calculate bar height */
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 static const int hidevacanttags		= 1;		/* Hide vacant tags and remove rectangle indicators */
 static const int floathighlight		= 1;		/* Use different border color for floating window */
@@ -22,7 +22,7 @@ static const unsigned int gappoh    = 10;       /* horiz outer gap between windo
 static const unsigned int gappov    = 10;       /* vert outer gap between windows and screen edge */
 static const int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int underlinetags		= 1;		/* enable tag underline */
-static const unsigned int ulinepad	= 0;		/* horizontal padding between the underline and tag */
+static const unsigned int ulinepad	= 2;		/* horizontal padding between the underline and tag */
 static const unsigned int ulinestroke	= 2;	/* thickness / height of the underline */
 static const unsigned int ulinevoffset	= 0;	/* how far above the bottom of the bar the line should appear */
 static const int ulineall			= 0;		/* 1 to show underline on all non empty tags */
@@ -39,6 +39,7 @@ static const Rule rules[] = {
 	/* class     			instance     		title          tags mask   isfloating  	isterminal  noswallow  monitor */
 	{ "Alacritty",			NULL,       		NULL,          0,            0,        	1,          0,         	-1 },
 	{ "st-256color",		NULL,       		NULL,          0,            0,        	1,          0,         	-1 },
+	{ "Thunar",				NULL,				NULL,		   0,			 1,			0,			0,			-1 },
 	{ "TelegramDesktop", 	"telegram-desktop", "Media viewer",0,			 1, 		0, 		 	1, 			-1 }, // telegram media viewer
 	{ "firefox", 			"Toolkit",   		"Picture-in-Picture", 0,     1, 		0, 			0,			-1 },
 	{ "Pavucontrol", 		NULL,   			NULL, 		   0,    		 1, 		0, 			0,			-1 },
@@ -97,7 +98,7 @@ static const char *vol_down[]  = { "pactl", "set-sink-volume", "@DEFAULT_SINK@",
 static const char *vol_mute[]  = { "pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle", NULL };
 static const char *db_vol_update[] = { "pkill", "-RTMIN+1", "dwmblocks", NULL };
 static const char *db_br_update[]  = { "pkill", "-RTMIN+2", "dwmblocks", NULL };
-static const char *xob_br_update[] = { "/home/rohit/.config/xob/scripts/brightness.sh", NULL };
+static const char *xob_br_update[] = { "sh", "/home/rohit/.config/xob/scripts/brightness.sh", NULL };
 
 static const char *play_tggl[] = { "python3", "/home/rohit/.config/scripts/media.py", NULL };
 static const char *play_next[] = { "playerctl", "next", NULL };
@@ -143,8 +144,8 @@ static Key keys[] = {
     // Brightness control
     { 0,                            XF86XK_MonBrightnessUp,   spawn,          {.v = bright_up } },
 	{ 0,                            XF86XK_MonBrightnessDown, spawn,          {.v = bright_down } }, 
-	{ 0,                            XF86XK_MonBrightnessUp,   spawn,          {.v = db_br_update } },
-	{ 0,                            XF86XK_MonBrightnessDown, spawn,          {.v = db_br_update } },    
+	{ 0,                            XF86XK_MonBrightnessUp,   spawn,          {.v = xob_br_update } },
+	{ 0,                            XF86XK_MonBrightnessDown, spawn,          {.v = xob_br_update } },    
 
 	// window layout and control
 	{ MODKEY,                       XK_f,                     setlayout,      {.v = &layouts[1]} }, // float

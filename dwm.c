@@ -620,6 +620,7 @@ buttonpress(XEvent *e)
 	if (ev->window == selmon->barwin) {
 		i = x = 0;
 		x += TEXTW(buttonbar);
+		if(!(*buttonbar)) x = 0;
 		if(ev->x < x){
 			click = ClkButton;
 		} else {
@@ -1027,9 +1028,11 @@ drawbar(Monitor *m)
 			urg |= c->tags;
 	}
 	x = 0;
-	w = blw = TEXTW(buttonbar);
-	drw_setscheme(drw, scheme[SchemeCol1]);
-	x = drw_text(drw, x, 0, w, bh, lrpad / 2, buttonbar, 0);
+	if(*buttonbar) {
+		w = blw = TEXTW(buttonbar);
+		drw_setscheme(drw, scheme[SchemeCol1]);
+		x = drw_text(drw, x, 0, w, bh, lrpad / 2, buttonbar, 0);
+	}
 	for (i = 0; i < LENGTH(tags); i++) {
 		/* do not draw vacant tags */
 		if (hidevacanttags && !(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
