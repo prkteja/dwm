@@ -29,7 +29,7 @@ static const int ulineall			= 0;		/* 1 to show underline on all non empty tags *
 
 /* tagging */
 // static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-static const char *tags[] = { "1  :  󰚺", "2  :  󰈹", "3  :  󰨞", "4", "5", "6", "7", "8  :  󰔁", "9  :  󰓇" };
+static const char *tags[] = { "1  :  󰚺", "2  :  󰈹", "3  :  󰇮", "4  :  󰨞", "5", "6", "7", "8  :  󰔁", "9  :  󰓇" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -40,10 +40,11 @@ static const Rule rules[] = {
 	{ "Alacritty",			NULL,       		NULL,          0,            0,        	1,          0,         	-1 },
 	{ "st-256color",		NULL,       		NULL,          0,            0,        	1,          0,         	-1 },
 	{ "Thunar",				NULL,				NULL,		   0,			 1,			0,			0,			-1 },
+	{ "SimpleScreenRecorder",	NULL,			NULL,		   0,			 1,			0,			0,			-1 },
 	{ "TelegramDesktop", 	"telegram-desktop", "Media viewer",0,			 1, 		0, 		 	1, 			-1 }, // telegram media viewer
 	{ "firefox", 			"Toolkit",   		"Picture-in-Picture", 0,     1, 		0, 			0,			-1 },
 	{ "Pavucontrol", 		NULL,   			NULL, 		   0,    		 1, 		0, 			0,			-1 },
-	{ "Nm-connection-editor", 		NULL,		NULL, 		   0,    		 1, 		0, 			0,			-1 },
+	{ "Nm-connection-editor", 	NULL,			NULL, 		   0,    		 1, 		0, 			0,			-1 },
 	{ NULL,       			NULL,       		"Event Tester",0,            0,        	0,          1,         	-1 }, // xev
 };
 
@@ -54,8 +55,8 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "Tile",     tile },    /* first entry is default */
 	{ "Float",    NULL },    /* no layout function means floating behavior */
+	{ "Tile",     tile },    /* first entry is default */
 	{ "Max",      monocle },
 	{ "Deck",     deck },
 	{ "BStack",	  bstack },
@@ -104,10 +105,10 @@ static const char *play_tggl[] = { "python3", "/home/rohit/.config/scripts/media
 static const char *play_next[] = { "playerctl", "next", NULL };
 static const char *play_prev[] = { "playerctl", "previous", NULL };
 static const char *skippy_xd[] = { "skippy-xd", NULL };
-static const char *clipmenu[]  = { "clipmenu", NULL };
+static const char *clipmenu[]  = { "clipmenu", "-p", "Clipboard", NULL };
 
 static const char scratchpadname[] = "scratchpad";
-static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x30", NULL };
+static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "100x25", NULL };
 
 static Key keys[] = {
 	/* modifier                     key                       function        argument */
@@ -148,8 +149,8 @@ static Key keys[] = {
 	{ 0,                            XF86XK_MonBrightnessDown, spawn,          {.v = xob_br_update } },    
 
 	// window layout and control
-	{ MODKEY,                       XK_f,                     setlayout,      {.v = &layouts[1]} }, // float
-	{ MODKEY,                       XK_t,                     setlayout,      {.v = &layouts[0]} }, // tiling
+	{ MODKEY,                       XK_f,                     setlayout,      {.v = &layouts[0]} }, // float
+	{ MODKEY,                       XK_t,                     setlayout,      {.v = &layouts[1]} }, // tiling
 	{ MODKEY,                       XK_m,                     setlayout,      {.v = &layouts[2]} }, // monocle
 	{ MODKEY,                       XK_c,					  setlayout,      {.v = &layouts[3]} }, // deck
 	{ MODKEY,				        XK_o,                     setlayout,      {.v = &layouts[4]} }, // bstack
@@ -212,7 +213,7 @@ static Button buttons[] = {
 	{ ClkLtSymbol,          0,             		 Button3,        setlayout,      {0} },
 	{ ClkWinTitle,          0,             		 Button1,        spawn,          {.v = winlist } },
 	{ ClkWinTitle,          0,             		 Button2,        killclient,     {0} },
-	{ ClkWinTitle,          0,             		 Button3,        zoom,           {0} },
+	{ ClkWinTitle,          0,             		 Button3,        focusstack,     {.i = +1 } },
 	{ ClkClientWin,         MODKEY,        		 Button1,        movemouse,      {0} }, // move window
 	{ ClkClientWin,         MODKEY,        		 Button2,        togglefloating, {0} }, // float window
 	{ ClkClientWin,         MODKEY,        		 Button3,        resizemouse,    {0} }, // resize window

@@ -1,4 +1,5 @@
 static const char drac_bg[] 		= "#282a36";
+// static const char drac_bg3[] 		= "#282a36";
 static const char drac_bg2[]		= "#383a59";
 static const char drac_bg3[] 		= "#1e1f29";
 static const char drac_sel[] 		= "#5f6a8e";
@@ -20,7 +21,8 @@ static const char *colors[][3]      = {
 	[SchemeNorm]	= { drac_fg,		drac_bg3,	drac_sel  },
 	// [SchemeSel]		= { drac_bg3,		drac_sel2,	drac_sel2 },
 	[SchemeSel]		= { drac_fg,		drac_bg,	drac_sel2 },
-	[SchemeUline]	= { drac_sel2,		drac_bg,	drac_green  },
+	[SchemeUline]	= { drac_sel3,		drac_bg3,	drac_orange  }, // border color of floating windows
+	[SchemeUlineA]	= { drac_sel2,		drac_bg,	drac_cyan  },
 	[SchemeSymbol]	= { drac_fg,		drac_bg2,	drac_sel  },
 	[SchemeTitle]	= { drac_sel2,		drac_bg,	drac_sel  },
 	[SchemeCol1]	= { drac_bg3,		drac_sel2,	drac_sel  },
