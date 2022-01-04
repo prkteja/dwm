@@ -50,7 +50,13 @@ static const Rule rules[] = {
 	{ "firefox", 			"Toolkit",   		"Picture-in-Picture", 0,     1, 		0, 			0,			-1 },
 	{ "Pavucontrol", 		NULL,   			NULL, 		   0,    		 1, 		0, 			0,			-1 },
 	{ "Nm-connection-editor", 	NULL,			NULL, 		   0,    		 1, 		0, 			0,			-1 },
+	{ "Protonvpn",			"protonvpn",		NULL, 		   0,    		 1, 		0, 			0,			-1 },
 	{ NULL,       			NULL,       		"Event Tester",0,            0,        	0,          1,         	-1 }, // xev
+	{ "firefox",			"Navigator",		NULL, 		   1<<1,    	 0, 		0, 			0,			-1 },
+	{ "Google-chrome",		"google-chrome",	NULL, 		   1<<2,    	 0, 		0, 			0,			-1 },
+	{ "LibreWolf",			"Navigator",		NULL, 		   1<<6,    	 0, 		0, 			0,			-1 },
+	{ "TelegramDesktop",	"telegram-desktop",	NULL, 		   1<<7,    	 0, 		0, 			0,			-1 },
+	{ "Spotify",			"spotify",			NULL, 		   1<<8,    	 0, 		0, 			0,			-1 },
 };
 
 /* layout(s) */
@@ -219,6 +225,10 @@ static Button buttons[] = {
 	{ ClkWinTitle,          0,             		 Button1,        spawn,          {.v = winlist } },
 	{ ClkWinTitle,          0,             		 Button2,        killclient,     {0} },
 	{ ClkWinTitle,          0,             		 Button3,        focusstack,     {.i = +1 } },
+	{ ClkWinTitle,          0,             		 Button4,        focusstack,      {.i = -1 } },
+	{ ClkWinTitle,          0,             		 Button5,        focusstack,      {.i = +1 } },
+	{ ClkStatusText,        0,             		 Button4,        shiftview,      {.i = -1 } },
+	{ ClkStatusText,        0,             		 Button5,        shiftview,      {.i = +1 } },
 	{ ClkClientWin,         MODKEY,        		 Button1,        movemouse,      {0} }, // move window
 	{ ClkClientWin,         MODKEY,        		 Button2,        togglefloating, {0} }, // float window
 	{ ClkClientWin,         MODKEY,        		 Button3,        resizemouse,    {0} }, // resize window
@@ -227,5 +237,7 @@ static Button buttons[] = {
 	{ ClkTagBar,            0,             		 Button3,        toggleview,     {0} }, // toggle multiple tags
 	{ ClkTagBar,            MODKEY,        		 Button1,        tag,            {0} }, // dont know what it does
 	{ ClkTagBar,            MODKEY,        		 Button3,        toggletag,      {0} }, // ||
+	{ ClkTagBar,			0,             		 Button4,        shiftviewactive,{.i = -1 } },
+	{ ClkTagBar,			0,             		 Button5,        shiftviewactive,{.i = +1 } },
 	{ ClkButton,            0,		        	 Button1,        spawn,          {.v = dmenucmd } },
 };
