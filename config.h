@@ -8,6 +8,7 @@ static const unsigned int snap      = 8;		/* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 1;   	/* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 8;   /* systray spacing */
+static const unsigned int systraypadding = 16;  /* space btw systray and status bar */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
 static const int showsystray        = 1;     /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
@@ -85,6 +86,8 @@ static const Layout layouts[] = {
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
+#define STATUSBAR "dwmblocks"
+
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[]  = { "dmenu_run_h", "-i", NULL };
@@ -108,7 +111,7 @@ static const char *bright_up[] = {"brightnessctl", "set", "5%+", NULL};
 static const char *vol_up[]    = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+2%", NULL };
 static const char *vol_down[]  = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-2%", NULL };
 static const char *vol_mute[]  = { "pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle", NULL };
-static const char *db_vol_update[] = { "pkill", "-RTMIN+1", "dwmblocks", NULL };
+static const char *db_vol_update[] = { "pkill", "-RTMIN+3", "dwmblocks", NULL };
 static const char *db_br_update[]  = { "pkill", "-RTMIN+2", "dwmblocks", NULL };
 static const char *xob_br_update[] = { "sh", "/home/rohit/.config/xob/scripts/brightness.sh", NULL };
 
@@ -227,8 +230,11 @@ static Button buttons[] = {
 	{ ClkWinTitle,          0,             		 Button3,        focusstack,     {.i = +1 } },
 	{ ClkWinTitle,          0,             		 Button4,        focusstack,      {.i = -1 } },
 	{ ClkWinTitle,          0,             		 Button5,        focusstack,      {.i = +1 } },
-	{ ClkStatusText,        0,             		 Button4,        shiftview,      {.i = -1 } },
-	{ ClkStatusText,        0,             		 Button5,        shiftview,      {.i = +1 } },
+	{ ClkStatusText,        0,					 Button1,        sigstatusbar,   {.i = 1} },
+	{ ClkStatusText,        0,					 Button2,        sigstatusbar,   {.i = 2} },
+	{ ClkStatusText,        0,					 Button3,        sigstatusbar,   {.i = 3} },
+	{ ClkStatusText,        0,					 Button4,        sigstatusbar,   {.i = 4} },
+	{ ClkStatusText,        0,					 Button5,        sigstatusbar,   {.i = 5} },
 	{ ClkClientWin,         MODKEY,        		 Button1,        movemouse,      {0} }, // move window
 	{ ClkClientWin,         MODKEY,        		 Button2,        togglefloating, {0} }, // float window
 	{ ClkClientWin,         MODKEY,        		 Button3,        resizemouse,    {0} }, // resize window

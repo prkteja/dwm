@@ -222,6 +222,7 @@ static void focusstack(const Arg *arg);
 static Atom getatomprop(Client *c, Atom prop);
 static int getrootptr(int *x, int *y);
 static long getstate(Window w);
+static pid_t getstatusbarpid();
 static unsigned int getsystraywidth();
 static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
 static void grabbuttons(Client *c, int focused);
@@ -240,6 +241,7 @@ static Client *nexttiled(Client *c);
 static void pop(Client *);
 static void propertynotify(XEvent *e);
 static void quit(const Arg *arg);
+static int realstextw(char* ptr);
 static Monitor *recttomon(int x, int y, int w, int h);
 static void removesystrayicon(Client *i);
 static void resize(Client *c, int x, int y, int w, int h, int interact);
@@ -278,6 +280,7 @@ static void setviewport(void);
 static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
 static void sigchld(int unused);
+static void sigstatusbar(const Arg *arg);
 static void spawn(const Arg *arg);
 static Monitor *systraytomon(Monitor *m);
 static void tag(const Arg *arg);
@@ -330,6 +333,9 @@ static void shifttagview(const Arg *arg);
 static Systray *systray =  NULL;
 static const char broken[] = "broken";
 static char stext[256];
+static const char *statussep = "󰤃";
+static int statussig;
+static pid_t statuspid = -1;
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
 static int bh, blw = 0;      /* bar geometry */
@@ -676,8 +682,31 @@ buttonpress(XEvent *e)
 				arg.ui = 1 << i;
 			} else if (ev->x < x + blw)
 				click = ClkLtSymbol;
-			else if (ev->x > selmon->ww - (int)TEXTW(stext) - getsystraywidth())
+			else if (ev->x > selmon->ww - realstextw(NULL) - getsystraywidth()){
 				click = ClkStatusText;
+				statussig = 1;
+				char rstext[256] = {'\0'};
+				x = selmon->ww - realstextw(rstext) 
+					- (getsystraywidth()*(1-systrayonleft));
+				for (int i=0; i<strlen(rstext)-strlen(statussep); i++) {
+					int j;
+					int match = 1;
+					for (j = 0; j<strlen(statussep); j++) {
+						if (statussep[j] != rstext[i+j]) {
+							match = 0;
+							break;
+						}
+					}
+					if (match) {
+						rstext[i] = '\0';
+						int dx = TEXTW(rstext) - lrpad;
+						dx += (TEXTW(statussep) - lrpad)/2;
+						rstext[i] = statussep[0];
+						if (x + dx > ev->x) break;
+						statussig++;
+					}
+				}
+			}
 			else
 				click = ClkWinTitle;
 		}
@@ -1077,10 +1106,10 @@ dirtomon(int dir)
 }
 
 int
-realstextw()
+realstextw(char* ptr)
 {
 	char *ts = stext;
-	char stextr[strlen(stext)];
+	char stextr[strlen(stext)+1];
 	char *tr = stextr;
 	while (1) {
 		if ((unsigned int)*ts > LENGTH(colors)) {
@@ -1092,6 +1121,7 @@ realstextw()
 		}
 		ts++;
 	}
+	if(ptr) strcpy(ptr, stextr);
 	return TEXTW(stextr);
 }
 
@@ -1332,6 +1362,30 @@ getatomprop(Client *c, Atom prop)
 		XFree(p);
 	}
 	return atom;
+}
+
+pid_t
+getstatusbarpid()
+{
+	char buf[32], *str = buf, *c;
+	FILE *fp;
+
+	if (statuspid > 0) {
+		snprintf(buf, sizeof(buf), "/proc/%u/cmdline", statuspid);
+		if ((fp = fopen(buf, "r"))) {
+			fgets(buf, sizeof(buf), fp);
+			while ((c = strchr(str, '/')))
+				str = c + 1;
+			fclose(fp);
+			if (!strcmp(str, STATUSBAR))
+				return statuspid;
+		}
+	}
+	if (!(fp = popen("pidof -s "STATUSBAR, "r")))
+		return -1;
+	fgets(buf, sizeof(buf), fp);
+	pclose(fp);
+	return strtol(buf, NULL, 10);
 }
 
 int
@@ -2372,6 +2426,20 @@ sigchld(int unused)
 }
 
 void
+sigstatusbar(const Arg *arg)
+{
+	fprintf(stderr, "%d\n", statussig);
+	union sigval sv;
+
+	if (!statussig)
+		return;
+	sv.sival_int = arg->i;
+	if ((statuspid = getstatusbarpid()) <= 0)
+		return;
+	sigqueue(statuspid, SIGRTMIN+statussig, sv);
+}
+
+void
 spawn(const Arg *arg)
 {
 	if (arg->v == dmenucmd)
@@ -2904,13 +2972,13 @@ updatesystray(void)
 	Client *i;
 	Monitor *m = systraytomon(NULL);
 	unsigned int x = m->mx + m->mw;
-	unsigned int sw = realstextw() - lrpad + systrayspacing;
+	unsigned int sw = realstextw(NULL) - lrpad + systrayspacing;
 	unsigned int w = 1;
 
 	if (!showsystray)
 		return;
 	if (systrayonleft)
-		x -= sw + lrpad / 2 - 16;
+		x -= sw + lrpad / 2 - systraypadding;
 	if (!systray) {
 		/* init systray */
 		if (!(systray = (Systray *)calloc(1, sizeof(Systray))))
