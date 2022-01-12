@@ -23,8 +23,8 @@ static const char *colors[][3]      = {
 	[SchemeUlineA]	= { drac_sel2,		drac_bg,	drac_cyan  },
 	[SchemeSymbol]	= { drac_fg,		drac_bg2,	drac_sel  },
 	[SchemeTitle]	= { drac_sel2,		drac_bg,	drac_sel  },
-	[SchemeCol1]	= { drac_fg,		drac_bg3,	drac_sel  }, // button bar
-	[SchemeCol2]	= { drac_yellow,	drac_bg3,	drac_sel  },
+	[SchemeCol1]	= { drac_fg,		drac_bg,	drac_sel  }, // button bar
+	[SchemeCol2]	= { drac_green,		drac_bg3,	drac_sel  }, // floating win title
 	[SchemeCol3]	= { drac_cyan,		drac_bg3,	drac_sel  },
 	[SchemeCol4]	= { drac_fg2,		drac_bg3,	drac_sel  },
 };
