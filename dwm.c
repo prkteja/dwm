@@ -2428,7 +2428,6 @@ sigchld(int unused)
 void
 sigstatusbar(const Arg *arg)
 {
-	fprintf(stderr, "%d\n", statussig);
 	union sigval sv;
 
 	if (!statussig)
