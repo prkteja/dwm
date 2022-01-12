@@ -123,7 +123,7 @@ static const char *skippy_xd[] = { "skippy-xd", NULL };
 static const char *clipmenu[]  = { "clipmenu", "-p", "Clipboard", NULL };
 
 static const char scratchpadname[] = "scratchpad";
-static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "100x25", NULL };
+static const char *scratchpadcmd[] = { "tabbed", "-c", "-g", "1342x752", "st", "-t", scratchpadname, "-w", NULL };
 
 static Key keys[] = {
 	/* modifier                     key                       function        argument */
