@@ -10,7 +10,7 @@ static const unsigned int systrayonleft = 1;   	/* 0: systray in the right corne
 static const unsigned int systrayspacing = 8;   /* systray spacing */
 static const unsigned int systraypadding = 16;  /* space btw systray and status bar */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
-static const int showsystray        = 1;     /* 0 means no systray */
+static const int showsystray        = 1;		/* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char buttonbar[]       = ""; //󰣇   /* Empty string means no button */
@@ -43,16 +43,16 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class     			instance     		title          tags mask   isfloating  	isterminal  noswallow  monitor */
+	{ NULL,       			NULL,       		"Event Tester",0,            0,        	0,          1,         	-1 }, // xev
 	{ "Alacritty",			NULL,       		NULL,          0,            0,        	1,          0,         	-1 },
 	{ "st-256color",		NULL,       		NULL,          0,            0,        	1,          0,         	-1 },
 	{ "Thunar",				NULL,				NULL,		   0,			 1,			0,			0,			-1 },
+	{ "Pavucontrol", 		NULL,   			NULL, 		   0,    		 1, 		0, 			0,			-1 },
 	{ "SimpleScreenRecorder",	NULL,			NULL,		   0,			 1,			0,			0,			-1 },
+	{ "Nm-connection-editor", 	NULL,			NULL, 		   0,    		 1, 		0, 			0,			-1 },
 	{ "TelegramDesktop", 	"telegram-desktop", "Media viewer",0,			 1, 		0, 		 	1, 			-1 }, // telegram media viewer
 	{ "firefox", 			"Toolkit",   		"Picture-in-Picture", 0,     1, 		0, 			0,			-1 },
-	{ "Pavucontrol", 		NULL,   			NULL, 		   0,    		 1, 		0, 			0,			-1 },
-	{ "Nm-connection-editor", 	NULL,			NULL, 		   0,    		 1, 		0, 			0,			-1 },
 	{ "Protonvpn",			"protonvpn",		NULL, 		   0,    		 1, 		0, 			0,			-1 },
-	{ NULL,       			NULL,       		"Event Tester",0,            0,        	0,          1,         	-1 }, // xev
 	{ "firefox",			"Navigator",		NULL, 		   1<<1,    	 0, 		0, 			0,			-1 },
 	{ "Google-chrome",		"google-chrome",	NULL, 		   1<<2,    	 0, 		0, 			0,			-1 },
 	{ "LibreWolf",			"Navigator",		NULL, 		   1<<6,    	 0, 		0, 			0,			-1 },
