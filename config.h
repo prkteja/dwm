@@ -20,7 +20,9 @@ static const int hidevacanttags		= 1;		/* Hide vacant tags and remove rectangle 
 static const int floathighlight		= 0;		/* Use different border color for floating window */
 static const int floattitlecolor	= 1;		/* Use different title color for floating window */
 
-static const char *fonts[]          = { "Google Sans:style=Medium:size=11", "Material Design Icons:size=11" };
+static const char *fonts[]          = { "Google Sans:style=Medium:size=11", 
+                                        "Material Design Icons:size=11",
+                                        "Noto Color Emoji:size=11"};
 static const char dmenufont[]       = "Google Sans:size=10";
 
 static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
@@ -123,7 +125,7 @@ static const char *skippy_xd[] = { "skippy-xd", NULL };
 static const char *clipmenu[]  = { "clipmenu", "-p", "Clipboard", NULL };
 
 static const char scratchpadname[] = "scratchpad";
-static const char *scratchpadcmd[] = { "tabbed", "-c", "-g", "1342x752", "st", "-t", scratchpadname, "-w", NULL };
+static const char *scratchpadcmd[] = { "tabbed", "-c", "-g", "1342x752", "-N", scratchpadname, "st", "-w", NULL };
 
 static Key keys[] = {
 	/* modifier                     key                       function        argument */
