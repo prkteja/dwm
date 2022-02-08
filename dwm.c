@@ -1209,7 +1209,7 @@ drawbar(Monitor *m)
 	drw_setscheme(drw, scheme[SchemeSymbol]);
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 
-	if ((w = m->ww - tw - stw - x) > bh) {
+	if ((w = m->ww - tw - stw - x - (systrayonleft?getsystraywidth():0)) > bh) {
 		if (m->sel) {
 			drw_setscheme(drw, scheme[m == selmon ? SchemeTitle : SchemeNorm]);
 			if (m->sel->isfloating && !floathighlight && !floattitlecolor)
