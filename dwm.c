@@ -2434,10 +2434,20 @@ sigstatusbar(const Arg *arg)
 
 	if (!statussig)
 		return;
-	sv.sival_int = arg->i;
 	if ((statuspid = getstatusbarpid()) <= 0)
 		return;
-	sigqueue(statuspid, SIGRTMIN+statussig, sv);
+	if (dwmblocks_sigusr1) {
+		sv.sival_int = (statussig << 8) | arg->i;
+		if (sigqueue(statuspid, SIGUSR1, sv) == -1) {
+			if (errno == ESRCH) {
+				if (!getstatusbarpid())
+					sigqueue(statuspid, SIGUSR1, sv);
+		   }
+		}
+	} else {
+		sv.sival_int = arg->i;
+		sigqueue(statuspid, SIGRTMIN+statussig, sv);
+	}
 }
 
 void
