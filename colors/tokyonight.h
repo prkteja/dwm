@@ -10,17 +10,18 @@ static const char tn_white[] 	= "#ddeeff";
 static const char tn_green[]	= "#9ece6a";
 static const char tn_cyan[]		= "#73daca";
 static const char tn_grey[]		= "#565f89";
+static const char tn_grey2[]	= "#3b4261";
 
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm]	= { tn_fg,			tn_bg2,		tn_blue2 },
+	[SchemeNorm]	= { tn_fg,			tn_bg2,		tn_grey },
 	[SchemeSel]		= { tn_white,		tn_bg2,		tn_blue2 },
-	[SchemeUline]	= { tn_cyan,		tn_bg2,		tn_purple }, // border color of floating windows
-	[SchemeUlineA]	= { tn_blue2,		tn_bg2,		tn_purple },
-	[SchemeSymbol]	= { tn_green,		tn_bg,		tn_blue	},
-	[SchemeTitle]	= { tn_blue2,		tn_bg2,		tn_blue },
+	[SchemeUline]	= { tn_grey,		tn_bg2,		tn_purple }, // border color of floating windows
+	[SchemeUlineA]	= { tn_red,			tn_bg2,		tn_purple },
+	[SchemeSymbol]	= { tn_blue2,		tn_bg,		tn_blue	},
+	[SchemeTitle]	= { tn_green,		tn_bg2,		tn_blue },
 	[SchemeCol1]	= { tn_red,			tn_bg,		tn_blue },
-	[SchemeCol2]	= { tn_orange,		tn_bg,		tn_blue },
-	[SchemeCol3]	= { tn_purple,		tn_bg2,		tn_blue },
+	[SchemeCol2]	= { tn_orange,		tn_bg,		tn_blue }, // button bar
+	[SchemeCol3]	= { tn_purple,		tn_bg2,		tn_blue }, // floating win title
 	[SchemeCol4]	= { tn_grey,		tn_bg2,		tn_blue },
 };

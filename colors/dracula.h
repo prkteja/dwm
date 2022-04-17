@@ -25,6 +25,6 @@ static const char *colors[][3]      = {
 	[SchemeTitle]	= { drac_sel2,		drac_bg,	drac_sel  },
 	[SchemeCol1]	= { drac_fg,		drac_bg3,	drac_sel  }, // button bar
 	[SchemeCol2]	= { drac_green,		drac_bg,	drac_sel  }, // floating win title
-	[SchemeCol3]	= { drac_cyan,		drac_bg3,	drac_sel  },
+	[SchemeCol3]	= { drac_red,		drac_bg3,	drac_sel  },
 	[SchemeCol4]	= { drac_fg2,		drac_bg3,	drac_sel  },
 };

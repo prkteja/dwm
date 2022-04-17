@@ -8,7 +8,7 @@ static const unsigned int snap      = 8;		/* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 1;   	/* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 8;   /* systray spacing */
-static const unsigned int systraypadding = 16;  /* space btw systray and status bar */
+static const unsigned int systraypadding = 20;  /* space btw systray and status bar */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, 
 												False: display systray on the last monitor*/
 static const int showsystray        = 1;		/* 0 means no systray */
@@ -35,8 +35,9 @@ static const int smartgaps          = 0;        /* 1 means no outer gap when the
 static const int underlinetags		= 1;		/* enable tag underline */
 static const unsigned int ulinepad	= 2;		/* horizontal padding between the underline and tag */
 static const unsigned int ulinestroke	= 2;	/* thickness / height of the underline */
-static const unsigned int ulinevoffset	= 0;	/* how far above the bottom of the bar the line should appear */
+static const unsigned int ulinevoffset	= 20;	/* how far above the bottom of the bar the line should appear */
 static const int ulineall			= 0;		/* 1 to show underline on all non empty tags */
+static const int dwmblocks_sigusr1	= 0;		/* Use SIGUSR1 signals for blocks instead of real time signals */
 
 /* tagging */
 // static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
@@ -61,9 +62,9 @@ static const Rule rules[] = {
 	{ "Protonvpn",			"protonvpn",		NULL, 		   0,    		 1, 		0, 			0,			-1 },
 	{ "firefox",			"Navigator",		NULL, 		   1<<1,    	 0, 		0, 			0,			-1 },
 	{ "Google-chrome",		"google-chrome",	NULL, 		   1<<2,    	 0, 		0, 			0,			-1 },
-	{ "LibreWolf",			"Navigator",		NULL, 		   1<<6,    	 0, 		0, 			0,			-1 },
+	{ "LibreWolf",			NULL,				NULL, 		   1<<6,    	 0, 		0, 			0,			-1 },
 	{ "TelegramDesktop",	"telegram-desktop",	NULL, 		   1<<7,    	 0, 		0, 			0,			-1 },
-	{ "Spotify",			"spotify",			NULL, 		   1<<8,    	 0, 		0, 			0,			-1 },
+	{ "Spotify",			NULL,				NULL, 		   1<<8,    	 0, 		0, 			0,			-1 },
 };
 
 /* layout(s) */
@@ -80,6 +81,16 @@ static const Layout layouts[] = {
 	{ "BStack",	  bstack },
 	{ NULL,       NULL },	 /* for cycle layouts */
 };
+
+static const MonitorRule monrules[] = {
+	/* monitor  tag  layout  mfact  nmaster  showbar  topbar */
+	{  0,       2,	 1,      -1,    -1,      -1,      -1     }, 
+	{  0,       3,	 1,      -1,    -1,      -1,      -1     }, 
+	{  0,       4,	 1,      -1,    -1,      -1,      -1     }, 
+	{  0,       6,	 1,      -1,    -1,      -1,      -1     }, 
+	{ -1,      -1,	 0,      -1,    -1,      -1,      -1     }, // default
+};
+
 
 /* key definitions */
 #define MODKEY Mod4Mask
