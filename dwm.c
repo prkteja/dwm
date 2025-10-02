@@ -2951,17 +2951,20 @@ updategeom(void)
 					updatebarpos(m);
 				}
 		} else { /* less monitors available nn < n */
+			for (m = mons; m; m = m->next) {
+				if (m->num >= nn) {
+					while ((c = m->clients)) {
+						dirty = 1;
+						m->clients = c->next;
+						detachstack(c);
+						c->mon = mons;
+						attach(c);
+						attachstack(c);
+					}
+				}
+			}
 			for (i = nn; i < n; i++) {
 				for (m = mons; m && m->next; m = m->next);
-				while ((c = m->clients)) {
-					dirty = 1;
-					m->clients = c->next;
-					detachstack(c);
-					c->mon = mons;
-					attach(c);
-					attachBelow(c);
-					attachstack(c);
-				}
 				if (m == selmon)
 					selmon = mons;
 				cleanupmon(m);
