@@ -1,3 +1,4 @@
+#include <X11/X.h>
 #include <X11/XF86keysym.h>
 #include "colors.h"
 /* See LICENSE file for copyright and license details. */
@@ -5,34 +6,37 @@
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 8;		/* snap pixel */
-static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
+static const unsigned int systraypinning = 2;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 1;   	/* 0: systray in the right corner, >0: systray on left of status text */
-static const unsigned int systrayspacing = 8;   /* systray spacing */
-static const unsigned int systraypadding = 20;  /* space btw systray and status bar */
+static const unsigned int systrayspacing = 10;   /* systray spacing */
+static const unsigned int systraypadding = 24;  /* space btw systray and status bar */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, 
 												False: display systray on the last monitor*/
 static const int showsystray        = 1;		/* 0 means no systray */
+static const int systrayiconsize	= 14;
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char buttonbar[]       = ""; //󰣇   /* Empty string means no button */
-static const int user_bh            = 0;        /* 0 means that dwm will calculate bar height */
+static const int user_bh            = 26;        /* 0 means that dwm will calculate bar height */
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
-static const int hidevacanttags		= 1;		/* Hide vacant tags and remove rectangle indicators */
+static const int hidevacanttags		= 0;		/* Hide vacant tags and remove rectangle indicators */
 static const int floathighlight		= 0;		/* Use different border color for floating window */
-static const int floattitlecolor	= 1;		/* Use different title color for floating window */
+static const int floattitlecolor	= 0;		/* Use different title color for floating window */
+static const int keeptitlebg		= 0;		/* Keep title baground even when there is no active window */
 
-static const char *fonts[]          = {"Google Sans:style=Medium:size=11", 
-                                        "Material Design Icons:size=11",
+static const char *fonts[]          = {"Noto Sans Mono:size=11",
 										"Noto Sans:size=11",
+										"Noto Sans CJK JP:size=11",
+                                        "Material Design Icons:size=11",
                                         "Noto Color Emoji:size=11"};
-static const char dmenufont[]       = "Google Sans:size=10";
+static const char dmenufont[]       = "Noto Sans Mono:size=11";
 
-static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
-static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
-static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov    = 10;       /* vert outer gap between windows and screen edge */
+static const unsigned int gappih    = 6;       /* horiz inner gap between windows */
+static const unsigned int gappiv    = 6;       /* vert inner gap between windows */
+static const unsigned int gappoh    = 6;       /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov    = 6;       /* vert outer gap between windows and screen edge */
 static const int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
-static const int underlinetags		= 1;		/* enable tag underline */
+static const int underlinetags		= 0;		/* enable tag underline */
 static const unsigned int ulinepad	= 2;		/* horizontal padding between the underline and tag */
 static const unsigned int ulinestroke	= 2;	/* thickness / height of the underline */
 static const unsigned int ulinevoffset	= 20;	/* how far above the bottom of the bar the line should appear */
@@ -40,8 +44,8 @@ static const int ulineall			= 0;		/* 1 to show underline on all non empty tags *
 static const int dwmblocks_sigusr1	= 0;		/* Use SIGUSR1 signals for blocks instead of real time signals */
 
 /* tagging */
-// static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-static const char *tags[] = { "1  :  󰚺", "2  :  󰈹", "3  :  󰇮", "4  :  󰨞", "5", "6", "7", "8  :  󰔁", "9  :  󰓇" };
+static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+// static const char *tags[] = { "1  :  󰚺", "2  :  󰈹", "3  :  󰇮", "4  :  󰨞", "5", "6", "7", "8  :  󰔁", "9  :  󰓇" };
 // static const char *tags[] = { "1:󰚺", "2:󰈹", "3:󰇮", "4:󰨞", "5", "6", "7", "8:󰔁", "9:󰓇" };
 
 static const Rule rules[] = {
@@ -54,17 +58,19 @@ static const Rule rules[] = {
 	{ "Alacritty",			NULL,       		NULL,          0,            0,        	1,          0,         	-1 },
 	{ "st-256color",		NULL,       		NULL,          0,            0,        	1,          0,         	-1 },
 	{ "Thunar",				NULL,				NULL,		   0,			 1,			0,			0,			-1 },
-	{ "Pavucontrol", 		NULL,   			NULL, 		   0,    		 1, 		0, 			0,			-1 },
+	{ "pavucontrol", 		NULL,   			NULL, 		   0,    		 1, 		0, 			0,			-1 },
+	{ "BLueman-manager",	NULL,   			NULL, 		   0,    		 1, 		0, 			0,			-1 },
 	{ "SimpleScreenRecorder",	NULL,			NULL,		   0,			 1,			0,			0,			-1 },
 	{ "Nm-connection-editor", 	NULL,			NULL, 		   0,    		 1, 		0, 			0,			-1 },
 	{ "TelegramDesktop", 	"telegram-desktop", "Media viewer",0,			 1, 		0, 		 	1, 			-1 }, // telegram media viewer
 	{ "firefox", 			"Toolkit",   		"Picture-in-Picture", 0,     1, 		0, 			0,			-1 },
 	{ "Protonvpn",			"protonvpn",		NULL, 		   0,    		 1, 		0, 			0,			-1 },
-	{ "firefox",			"Navigator",		NULL, 		   1<<1,    	 0, 		0, 			0,			-1 },
-	{ "Google-chrome",		"google-chrome",	NULL, 		   1<<2,    	 0, 		0, 			0,			-1 },
-	{ "LibreWolf",			NULL,				NULL, 		   1<<6,    	 0, 		0, 			0,			-1 },
-	{ "TelegramDesktop",	"telegram-desktop",	NULL, 		   1<<7,    	 0, 		0, 			0,			-1 },
-	{ "Spotify",			NULL,				NULL, 		   1<<8,    	 0, 		0, 			0,			-1 },
+	// { "firefox",			"Navigator",		NULL, 		   1<<1,    	 0, 		0, 			0,			-1 },
+	// { "Google-chrome",		"google-chrome",	NULL, 		   1<<2,    	 0, 		0, 			0,			-1 },
+	// { "libreWolf",			NULL,				NULL, 		   1<<6,    	 0, 		0, 			0,			-1 },
+	// { "TelegramDesktop",	"telegram-desktop",	NULL, 		   1<<7,    	 0, 		0, 			0,			-1 },
+	// { "Spotify",			NULL,				NULL, 		   1<<8,    	 0, 		0, 			0,			-1 },
+	// { NULL,					NULL,				"spotify_adblock",1<<8,    	 0, 		0, 			0,			-1 },
 };
 
 /* layout(s) */
@@ -74,21 +80,17 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "Float",    NULL },    /* no layout function means floating behavior */
-	{ "Tile",     tile },    /* first entry is default */
-	{ "Max",      monocle },
-	{ "Deck",     deck },
-	{ "BStack",	  bstack },
+	{ "><>",    NULL },    /* no layout function means floating behavior */
+	{ "[]=",     tile },    /* first entry is default */
+	{ "[M]",      monocle },
+	// { "Deck",     deck },
+	{ "TTT",	  bstack },
 	{ NULL,       NULL },	 /* for cycle layouts */
 };
 
 static const MonitorRule monrules[] = {
 	/* monitor  tag  layout  mfact  nmaster  showbar  topbar */
-	{  0,       2,	 1,      -1,    -1,      -1,      -1     }, 
-	{  0,       3,	 1,      -1,    -1,      -1,      -1     }, 
-	{  0,       4,	 1,      -1,    -1,      -1,      -1     }, 
-	{  0,       6,	 1,      -1,    -1,      -1,      -1     }, 
-	{ -1,      -1,	 0,      -1,    -1,      -1,      -1     }, // default
+	{ -1,      -1,	 1,      -1,    -1,      -1,      -1     }, // default
 };
 
 
@@ -98,7 +100,7 @@ static const MonitorRule monrules[] = {
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
 	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
-//	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
+	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
@@ -114,7 +116,7 @@ static const char *powermenu[] = { "powermenu", NULL };
 static const char *winlist[]   = { "winlist", NULL };
 static const char *termcmd[]   = { "alacritty", NULL };
 static const char *termcmd2[]  = { "st", NULL };
-static const char *browser[]   = { "firefox-nightly", NULL };
+static const char *browser[]   = { "firefox", NULL };
 static const char *discord[]   = { "discord", NULL };
 static const char *pavu[]      = { "pavucontrol", NULL };
 static const char *flameshot[] = { "flameshot", "gui", NULL };
@@ -128,23 +130,25 @@ static const char *bright_up[] = {"brightnessctl", "set", "5%+", NULL};
 static const char *vol_up[]    = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+2%", NULL };
 static const char *vol_down[]  = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-2%", NULL };
 static const char *vol_mute[]  = { "pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle", NULL };
-static const char *db_vol_update[] = { "pkill", "-RTMIN+3", "dwmblocks", NULL };
+static const char *db_vol_update[] = { "pkill", "-RTMIN+4", "dwmblocks", NULL };
+static const char *dunst_vol_update[] = { "get_volume", NULL };
 static const char *db_br_update[]  = { "pkill", "-RTMIN+2", "dwmblocks", NULL };
 static const char *xob_br_update[] = { "sh", "/home/rohit/.config/xob/scripts/brightness.sh", NULL };
 
-static const char *play_tggl[] = { "python3", "/home/rohit/.config/scripts/media.py", NULL };
+// static const char *play_tggl[] = { "python3", "/home/rohit/.config/scripts/media.py", NULL };
+static const char *play_tggl[] = { "playerctl", "play-pause", NULL };
 static const char *play_next[] = { "playerctl", "next", NULL };
 static const char *play_prev[] = { "playerctl", "previous", NULL };
 static const char *skippy_xd[] = { "skippy-xd", NULL };
-static const char *clipmenu[]  = { "clipmenu", "-p", "Clipboard", NULL };
+static const char *clipmenu[]  = { "clipmenu", "-p", "Clipboard:", NULL };
 
 static const char scratchpadname[] = "scratchpad";
-static const char *scratchpadcmd[] = { "tabbed", "-c", "-g", "1342x752", "-N", scratchpadname, "st", "-w", NULL };
+static const char *scratchpadcmd[] = { "tabbed", "-c", "-g", "1342x752", "-N", scratchpadname, "alacritty", "--embed", NULL };
 
 static Key keys[] = {
 	/* modifier                     key                       function        argument */
 	{ MODKEY,                       XK_Escape,                killclient,     {0} },         // kill window
-	{ MODKEY|ShiftMask,             XK_q,      				  quit,           {0} }, 		 // kill dwm
+	{ MODKEY|ShiftMask,             XK_c,      				  quit,           {0} }, 		 // kill dwm
 	{ MODKEY,                       XK_BackSpace,             spawn,          {.v = lock} }, // lock
 	{ MODKEY,                       XK_Delete,	              spawn,          {.v = powermenu} }, // powermenu
 
@@ -169,6 +173,9 @@ static Key keys[] = {
 	{ 0,                            XF86XK_AudioRaiseVolume,  spawn,          {.v = db_vol_update } },
 	{ 0,                            XF86XK_AudioLowerVolume,  spawn,          {.v = db_vol_update } },
 	{ 0,                            XF86XK_AudioMute,         spawn,          {.v = db_vol_update } },
+	{ 0,                            XF86XK_AudioRaiseVolume,  spawn,          {.v = dunst_vol_update } },
+	{ 0,                            XF86XK_AudioLowerVolume,  spawn,          {.v = dunst_vol_update } },
+	{ 0,                            XF86XK_AudioMute,         spawn,          {.v = dunst_vol_update } },
 	{ 0,                            XF86XK_AudioPlay,         spawn,          {.v = play_tggl } },
 	{ 0,                            XF86XK_AudioNext,         spawn,          {.v = play_next } },
 	{ 0,                            XF86XK_AudioPrev,         spawn,          {.v = play_prev } },
@@ -196,8 +203,12 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Down,                  focusstack,     {.i = +1 } }, // focus down
 	{ MODKEY,                       XK_Up,                    focusstack,     {.i = -1 } }, // focus up
 
-	{ MODKEY,                       XK_comma,                 incrgaps,       {.i = -4 } }, 
-	{ MODKEY,                       XK_period,                incrgaps,       {.i = +4 } },
+	{ MODKEY,                       XK_comma,                 focusmon,       {.i = -1 } }, 
+	{ MODKEY,                       XK_period,                focusmon,       {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_comma,                 tagmon,         {.i = -1 } }, 
+	{ MODKEY|ShiftMask,             XK_period,                tagmon,         {.i = +1 } },
+	// { MODKEY,                       XK_comma,                 incrgaps,       {.i = -4 } }, 
+	// { MODKEY,                       XK_period,                incrgaps,       {.i = +4 } },
 	{ MODKEY,                       XK_slash,                 defaultgaps,    {0} },
     
     { Mod1Mask,                     XK_Tab,                   focusstack,     {.i = +1 } }, // focus down
@@ -212,6 +223,7 @@ static Key keys[] = {
 
     { MODKEY,                       XK_h,		              shiftviewactive,      {.i = -1 } }, // switch to prev active tag
     { MODKEY,                       XK_l,					  shiftviewactive,      {.i = +1 } }, // switch to next active tag
+    { MODKEY,                       XK_equal,				  shiftviewempty,       {.i = +1 } }, // switch to next active tag
     { MODKEY,                       XK_Left,                  shiftview,      {.i = -1 } }, // switch to prev tag
     { MODKEY,                       XK_Right,                 shiftview,      {.i = +1 } }, // switch to next tag
 	{ MODKEY|ShiftMask,             XK_Left,                  shifttag,       {.i = -1 } }, // shift win to prev tag
@@ -260,7 +272,7 @@ static Button buttons[] = {
 	{ ClkTagBar,            0,             		 Button3,        toggleview,     {0} }, // toggle multiple tags
 	{ ClkTagBar,            MODKEY,        		 Button1,        tag,            {0} }, // dont know what it does
 	{ ClkTagBar,            MODKEY,        		 Button3,        toggletag,      {0} }, // ||
-	{ ClkTagBar,			0,             		 Button4,        shiftviewactive,{.i = -1 } },
-	{ ClkTagBar,			0,             		 Button5,        shiftviewactive,{.i = +1 } },
+	{ ClkTagBar,			0,             		 Button4,        shiftview,		{.i = -1 } },
+	{ ClkTagBar,			0,             		 Button5,        shiftview,		{.i = +1 } },
 	{ ClkButton,            0,		        	 Button1,        spawn,          {.v = dmenucmd } },
 };

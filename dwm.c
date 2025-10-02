@@ -338,6 +338,7 @@ static pid_t winpid(Window w);
 
 static void shiftview(const Arg *arg);
 static void shiftviewactive(const Arg *arg);
+static void shiftviewempty(const Arg *arg);
 static void shifttag(const Arg *arg);
 static void shifttagview(const Arg *arg);
 
@@ -349,7 +350,7 @@ static const char broken[] = "broken";
 static const char dwmdir[] = "dwm";
 static const char localshare[] = ".local/share";
 static char stext[256];
-static const char *statussep = "󰤃";
+static const char *statussep = "  ";
 static int statussig;
 static pid_t statuspid = -1;
 static int screen;
@@ -1193,7 +1194,7 @@ drawbar(Monitor *m)
 		stw = getsystraywidth();
 
 	/* draw status first so it can be overdrawn by tags later */
-	if (m == selmon) { /* status is only drawn on selected monitor */
+	if (1 || m == selmon) { /* status is only drawn on selected monitor */
 		drw_setscheme(drw, scheme[SchemeNorm]);
 		while (1) {
 			if ((unsigned int)*ts > LENGTH(colors)) {
@@ -1257,16 +1258,16 @@ drawbar(Monitor *m)
 	drw_setscheme(drw, scheme[SchemeSymbol]);
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 
-	if ((w = m->ww - tw - stw - x - (systrayonleft?getsystraywidth():0)) > bh) {
+	if ((w = m->ww - tw - stw - x - (systrayonleft?getsystraywidth()*0:0)) > bh) {
 		if (m->sel) {
-			drw_setscheme(drw, scheme[m == selmon ? SchemeTitle : SchemeNorm]);
+			drw_setscheme(drw, scheme[m == selmon ? SchemeTitle : (keeptitlebg ? SchemeTitle : SchemeNorm)]);
+			if(m->sel->isfloating && floattitlecolor)
+				drw_setscheme(drw, scheme[m == selmon ? SchemeCol2 : (keeptitlebg ? SchemeTitle : SchemeNorm)]);
+			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
 			if (m->sel->isfloating && !floathighlight && !floattitlecolor)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
-			if(m->sel->isfloating && floattitlecolor)
-				drw_setscheme(drw, scheme[m == selmon ? SchemeCol2 : SchemeNorm]);
-			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
 		} else {
-			drw_setscheme(drw, scheme[SchemeNorm]);
+			drw_setscheme(drw, scheme[(keeptitlebg ? SchemeTitle : SchemeNorm)]);
 			drw_rect(drw, x, 0, w, bh, 1, 1);
 		}
 	}
@@ -1707,7 +1708,7 @@ monocle(Monitor *m)
 		if (ISVISIBLE(c))
 			n++;
 	if (n > 0) /* override layout symbol */
-		snprintf(m->ltsymbol, sizeof m->ltsymbol, "Max : %d", n);
+		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[%d]", n);
 	for (c = nexttiled(m->clients); c; c = nexttiled(c->next))
 		resize(c, m->wx, m->wy, m->ww - 2 * c->bw, m->wh - 2 * c->bw, 0);
 }
@@ -2173,7 +2174,7 @@ setcurrentdesktop(void){
 }
 void setdesktopnames(void){
 	XTextProperty text;
-	Xutf8TextListToTextProperty(dpy, tags, TAGSLENGTH, XUTF8StringStyle, &text);
+	Xutf8TextListToTextProperty(dpy, (char **)tags, TAGSLENGTH, XUTF8StringStyle, &text);
 	XSetTextProperty(dpy, root, &text, netatom[NetDesktopNames]);
 }
 
@@ -2900,7 +2901,7 @@ updateclientlist()
 void updatecurrentdesktop(void){
 	long rawdata[] = { selmon->tagset[selmon->seltags] };
 	int i=0;
-	while(*rawdata >> i+1){
+	while(*rawdata >> (i+1)){
 		i++;
 	}
 	long data[] = { i };
@@ -3048,9 +3049,12 @@ updatesizehints(Client *c)
 void
 updatestatus(void)
 {
+	Monitor* m;
 	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
 		strcpy(stext, "dwm-"VERSION);
-	drawbar(selmon);
+	for (m = mons; m; m = m->next) {
+		drawbar(m);
+	}
 	updatesystray();
 }
 
@@ -3058,21 +3062,21 @@ void
 updatesystrayicongeom(Client *i, int w, int h)
 {
 	if (i) {
-		i->h = bh;
+		i->h = systrayiconsize;
 		if (w == h)
-			i->w = bh;
-		else if (h == bh)
+			i->w = systrayiconsize;
+		else if (h == systrayiconsize)
 			i->w = w;
 		else
-			i->w = (int) ((float)bh * ((float)w / (float)h));
+			i->w = (int) ((float)systrayiconsize * ((float)w / (float)h));
 		applysizehints(i, &(i->x), &(i->y), &(i->w), &(i->h), False);
 		/* force icons into the systray dimensions if they don't want to */
-		if (i->h > bh) {
+		if (i->h > systrayiconsize) {
 			if (i->w == i->h)
-				i->w = bh;
+				i->w = systrayiconsize;
 			else
-				i->w = (int) ((float)bh * ((float)i->w / (float)i->h));
-			i->h = bh;
+				i->w = (int) ((float)systrayiconsize * ((float)i->w / (float)i->h));
+			i->h = systrayiconsize;
 		}
 	}
 }
@@ -3124,7 +3128,7 @@ updatesystray(void)
 		/* init systray */
 		if (!(systray = (Systray *)calloc(1, sizeof(Systray))))
 			die("fatal: could not malloc() %u bytes\n", sizeof(Systray));
-		systray->win = XCreateSimpleWindow(dpy, root, x, m->by, w, bh, 0, 0, scheme[SchemeSel][ColBg].pixel);
+		systray->win = XCreateSimpleWindow(dpy, root, x, m->by, w, bh, 0, 0, scheme[SchemeNorm][ColBg].pixel);
 		wa.event_mask        = ButtonPressMask | ExposureMask;
 		wa.override_redirect = True;
 		wa.background_pixel  = scheme[SchemeNorm][ColBg].pixel;
@@ -3152,7 +3156,7 @@ updatesystray(void)
 		XMapRaised(dpy, i->win);
 		w += systrayspacing;
 		i->x = w;
-		XMoveResizeWindow(dpy, i->win, i->x, 0, i->w, i->h);
+		XMoveResizeWindow(dpy, i->win, i->x, bh>i->h?(int)(((float)(bh-i->h))/2.0):0, i->w, i->h);
 		w += i->w;
 		if (i->mon != m)
 			i->mon = m;
@@ -3519,6 +3523,32 @@ shiftviewactive(const Arg *arg) {
 			shifted.ui = shifted.ui >> (- arg->i)
 			   | shifted.ui << (LENGTH(tags) + arg->i);
 	} while (!(shifted.ui & occ)); 
+	view(&shifted);
+}
+
+void
+shiftviewempty(const Arg *arg) {
+	Arg shifted;
+	Client* c;
+	int occ = 0;
+	for (c = selmon->clients; c; c = c->next) {
+		occ |= (c->tags == 255 && hidevacanttags) ? 0 : c->tags;
+	}
+	shifted.ui = selmon->tagset[selmon->seltags];
+	int moves = 0;
+	do {
+		if(moves > 10)
+			return;
+		else moves++;
+
+		if(arg->i > 0) // left circular shift
+			shifted.ui = (shifted.ui << arg->i)
+			   | (shifted.ui >> (LENGTH(tags) - arg->i));
+
+		else // right circular shift
+			shifted.ui = shifted.ui >> (- arg->i)
+			   | shifted.ui << (LENGTH(tags) + arg->i);
+	} while (shifted.ui & occ); 
 	view(&shifted);
 }
 

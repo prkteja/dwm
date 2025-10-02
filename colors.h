@@ -1,1 +1,1 @@
-colors/dracula.h
+colors/default.h
