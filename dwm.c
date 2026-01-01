@@ -1177,7 +1177,7 @@ realstextw(char* ptr)
 void
 drawbar(Monitor *m)
 {
-	int x, w, tw = 0, stw = 0;
+	int x, w, tw = 0, stw = 0, stwl = 0;
 	int boxs = drw->fonts->h / 9;
 	int boxw = drw->fonts->h / 6 + 2;
 	unsigned int i, occ = 0, urg = 0;
@@ -1192,6 +1192,8 @@ drawbar(Monitor *m)
 
 	if(showsystray && m == systraytomon(m) && !systrayonleft)
 		stw = getsystraywidth();
+	if(showsystray && m == systraytomon(m) && systrayonleft)
+		stwl = getsystraywidth();
 
 	/* draw status first so it can be overdrawn by tags later */
 	if (1 || m == selmon) { /* status is only drawn on selected monitor */
@@ -1258,12 +1260,13 @@ drawbar(Monitor *m)
 	drw_setscheme(drw, scheme[SchemeSymbol]);
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 
-	if ((w = m->ww - tw - stw - x - (systrayonleft?getsystraywidth()*0:0)) > bh) {
+	if ((w = m->ww - tw - stw - x) > bh) {
 		if (m->sel) {
 			drw_setscheme(drw, scheme[m == selmon ? SchemeTitle : (keeptitlebg ? SchemeTitle : SchemeNorm)]);
 			if(m->sel->isfloating && floattitlecolor)
 				drw_setscheme(drw, scheme[m == selmon ? SchemeCol2 : (keeptitlebg ? SchemeTitle : SchemeNorm)]);
-			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
+			drw_text(drw, x, 0, w, bh, lrpad / 2, "", 0);
+			drw_text(drw, x, 0, w-stwl, bh, lrpad / 2, m->sel->name, 0);
 			if (m->sel->isfloating && !floathighlight && !floattitlecolor)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
 		} else {
@@ -3126,7 +3129,8 @@ updatesystray(void)
 	if (!showsystray)
 		return;
 	if (systrayonleft)
-		x -= sw + lrpad / 2 - systraypadding;
+		// x -= sw - lrpad / 2 - systraypadding;
+		x -= realstextw(NULL) -lrpad + systraypadding;
 	if (!systray) {
 		/* init systray */
 		if (!(systray = (Systray *)calloc(1, sizeof(Systray))))

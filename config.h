@@ -8,8 +8,8 @@ static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 8;		/* snap pixel */
 static const unsigned int systraypinning = 2;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 1;   	/* 0: systray in the right corner, >0: systray on left of status text */
-static const unsigned int systrayspacing = 10;   /* systray spacing */
-static const unsigned int systraypadding = 24;  /* space btw systray and status bar */
+static const unsigned int systrayspacing = 10;  /* systray spacing */
+static const int systraypadding = -4;			/* space btw systray and status bar */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, 
 												False: display systray on the last monitor*/
 static const int showsystray        = 1;		/* 0 means no systray */
@@ -45,7 +45,6 @@ static const int dwmblocks_sigusr1	= 0;		/* Use SIGUSR1 signals for blocks inste
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-// static const char *tags[] = { "1  :  󰚺", "2  :  󰈹", "3  :  󰇮", "4  :  󰨞", "5", "6", "7", "8  :  󰔁", "9  :  󰓇" };
 // static const char *tags[] = { "1:󰚺", "2:󰈹", "3:󰇮", "4:󰨞", "5", "6", "7", "8:󰔁", "9:󰓇" };
 
 static const Rule rules[] = {
@@ -62,7 +61,7 @@ static const Rule rules[] = {
 	{ "BLueman-manager",	NULL,   			NULL, 		   0,    		 1, 		0, 			0,			-1 },
 	{ "SimpleScreenRecorder",	NULL,			NULL,		   0,			 1,			0,			0,			-1 },
 	{ "Nm-connection-editor", 	NULL,			NULL, 		   0,    		 1, 		0, 			0,			-1 },
-	{ "TelegramDesktop", 	"telegram-desktop", "Media viewer",0,			 1, 		0, 		 	1, 			-1 }, // telegram media viewer
+	{ "TelegramDesktop", 	"Telegram",			"Media viewer",0,			 1, 		0, 		 	1, 			-1 }, // telegram media viewer
 	{ "firefox", 			"Toolkit",   		"Picture-in-Picture", 0,     1, 		0, 			0,			-1 },
 	{ "Protonvpn",			"protonvpn",		NULL, 		   0,    		 1, 		0, 			0,			-1 },
 	// { "firefox",			"Navigator",		NULL, 		   1<<1,    	 0, 		0, 			0,			-1 },
@@ -147,7 +146,7 @@ static const char *scratchpadcmd[] = { "tabbed", "-c", "-g", "1342x752", "-N", s
 
 static Key keys[] = {
 	/* modifier                     key                       function        argument */
-	{ MODKEY,                       XK_Escape,                killclient,     {0} },         // kill window
+	{ MODKEY|ShiftMask,             XK_q,					  killclient,     {0} },         // kill window
 	{ MODKEY|ShiftMask,             XK_c,      				  quit,           {0} }, 		 // kill dwm
 	{ MODKEY,                       XK_BackSpace,             spawn,          {.v = lock} }, // lock
 	{ MODKEY,                       XK_Delete,	              spawn,          {.v = powermenu} }, // powermenu
@@ -190,8 +189,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_f,                     setlayout,      {.v = &layouts[0]} }, // float
 	{ MODKEY,                       XK_t,                     setlayout,      {.v = &layouts[1]} }, // tiling
 	{ MODKEY,                       XK_m,                     setlayout,      {.v = &layouts[2]} }, // monocle
-	{ MODKEY,                       XK_c,					  setlayout,      {.v = &layouts[3]} }, // deck
-	{ MODKEY,				        XK_o,                     setlayout,      {.v = &layouts[4]} }, // bstack
+	{ MODKEY,				        XK_o,                     setlayout,      {.v = &layouts[3]} }, // bstack
 	{ MODKEY,						XK_backslash,			  cyclelayout,    {.i = +1 } },
 	{ MODKEY,						XK_p,					  togglefullscreen,    {0} },
 
@@ -265,7 +263,7 @@ static Button buttons[] = {
 	{ ClkStatusText,        0,					 Button4,        sigstatusbar,   {.i = 4} },
 	{ ClkStatusText,        0,					 Button5,        sigstatusbar,   {.i = 5} },
 	{ ClkClientWin,         MODKEY,        		 Button1,        movemouse,      {0} }, // move window
-	{ ClkClientWin,         MODKEY,        		 Button2,        togglefloating, {0} }, // float window
+	{ ClkClientWin,         MODKEY,        		 Button2,        killclient,	 {0} }, // close window
 	{ ClkClientWin,         MODKEY,        		 Button3,        resizemouse,    {0} }, // resize window
 	{ ClkClientWin,         MODKEY|ShiftMask,    Button1,        resizemouse,    {0} }, // resize window
 	{ ClkTagBar,            0,					 Button1,        view,           {0} }, // view tag

@@ -310,17 +310,30 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 
 		if (utf8strlen) {
 			drw_font_getexts(usedfont, utf8str, utf8strlen, &ew, NULL);
-			/* shorten text if necessary */
-			for (len = MIN(utf8strlen, sizeof(buf) - 1); len && ew > w; len--)
-				drw_font_getexts(usedfont, utf8str, len, &ew, NULL);
-
-			if (len) {
+			if (ew <= w) {
+				len = MIN(utf8strlen, sizeof(buf) - 1);
 				memcpy(buf, utf8str, len);
 				buf[len] = '\0';
-				if (len < utf8strlen)
-					for (i = len; i && i > len - 3; buf[--i] = '.')
-						; /* NOP */
+			} else {
+				unsigned int ellipsis_w;
+				drw_font_getexts(usedfont, "… ", 3, &ellipsis_w, NULL);
+				if (w < ellipsis_w) {
+					len = 0;
+					buf[0] = '\0';
+				} else {
+					for (len = MIN(utf8strlen, sizeof(buf) - 4); len; len--) {
+						drw_font_getexts(usedfont, utf8str, len, &ew, NULL);
+						if (ew <= w - ellipsis_w)
+							break;
+					}
+					memcpy(buf, utf8str, len);
+					strcpy(buf + len, "… ");
+					len = strlen(buf);
+					drw_font_getexts(usedfont, buf, len, &ew, NULL);
+				}
+			}
 
+			if (len) {
 				if (render) {
 					ty = y + (h - usedfont->h) / 2 + usedfont->xfont->ascent;
 					XftDrawStringUtf8(d, &drw->scheme[invert ? ColBg : ColFg],
